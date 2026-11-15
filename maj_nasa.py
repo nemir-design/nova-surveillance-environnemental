@@ -5,12 +5,12 @@ import pandas as pd
 import xarray as xr
 import earthaccess
 
-# 1. Récupérer vos identifiants depuis les secrets GitHub (ou valeurs directes en secours)
+# 1. Identifiants NASA Earthdata
 user = os.environ.get("EARTHDATA_USERNAME") or "glorykajangu"
 pwd = os.environ.get("EARTHDATA_PASSWORD", "")
 MAP_KEY = os.environ.get("FIRMS_MAP_KEY") or "80653989bbffd144bfd25618c06b200a"
 
-# 2. Créer le fichier officiel .netrc pour que earthaccess se connecte automatiquement
+# 2. Connexion via fichier .netrc
 if user and pwd:
     netrc_path = os.path.expanduser("~/.netrc")
     with open(netrc_path, "w") as f:
@@ -24,7 +24,7 @@ bukavu_bbox = (28.80, -2.56, 28.92, -2.45)
 zone_firms = "28.80,-2.56,28.92,-2.45"
 
 # 3. Récupérer les feux en quasi temps réel (NASA FIRMS - dernières 24h)
-feux_detectes =
+feux_detectes = list()
 try:
     serveur = "firms.modaps.eosdis.nasa.gov"
     url_firms = f"https://{serveur}/api/area/csv/{MAP_KEY}/VIIRS_SNPP_NRT/{zone_firms}/1"
@@ -48,7 +48,7 @@ try:
     res_gpm = earthaccess.search_data(short_name="GPM_3IMERGHHE", bounding_box=bukavu_bbox, temporal=(date_debut, date_fin))
     if res_gpm:
         fichiers = earthaccess.download(res_gpm[-1:], local_path="./temp_nasa")
-        ds = xr.open_dataset(fichiers, group="Grid", decode_times=False)
+        ds = xr.open_dataset(fichiers[0], group="Grid", decode_times=False)
         p_buk = ds["precipitation"].sel(lon=slice(28.80, 28.92), lat=slice(-2.56, -2.45))
         pluie_max = round(float(p_buk.max().values), 2)
 except Exception as e:
