@@ -1,0 +1,39 @@
+name: Mise a jour automatique NASA Bukavu
+
+on:
+  schedule:
+    # Exécute le robot automatiquement toutes les 3 heures
+    - cron: '0 */3 * * *'
+  workflow_dispatch: # Permet de lancer la mise à jour manuellement en 1 clic
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Récupérer les fichiers du dépôt
+        uses: actions/checkout@v4
+
+      - name: Configurer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Installer les bibliothèques NASA
+        run: pip install earthaccess pandas xarray netCDF4
+
+      - name: Exécuter le script de collecte NASA
+        env:
+          EARTHDATA_USERNAME: ${{ secrets.EARTHDATA_USERNAME }}
+          EARTHDATA_PASSWORD: ${{ secrets.EARTHDATA_PASSWORD }}
+          FIRMS_MAP_KEY: ${{ secrets.FIRMS_MAP_KEY }}
+        run: python maj_nasa.py
+
+      - name: Sauvegarder les nouvelles données sur le site
+        run: |
+          git config --local user.email "bot@nova-bukavu.org"
+          git config --local user.name "Robot NASA Bukavu"
+          git add donnees_live.json
+          git commit -m "Mise à jour automatique NASA" || exit 0
+          git push
