@@ -177,7 +177,7 @@ if(Pl.rate>0&&!RM){const pc=$('pluie'),c=document.createElement('canvas');c.id='
 const rs=()=>{W2=c.width=pc.clientWidth;H2=c.height=pc.clientHeight};rs();addEventListener('resize',rs);new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(pc);
 for(let i=0;i<n;i++)dr.push({x:Math.random()*W2,y:Math.random()*H2,l:8+Math.random()*14,v:5+Math.random()*7+Pl.rate/3});
 (function f(){if(vis&&!document.hidden){g.clearRect(0,0,W2,H2);g.strokeStyle='#3b5bdb';g.lineWidth=1.2;g.globalAlpha=.4;g.beginPath();dr.forEach(d=>{g.moveTo(d.x,d.y);g.lineTo(d.x-d.l*.25,d.y+d.l);d.y+=d.v;d.x-=d.v*.25;if(d.y>H2||d.x<0){d.y=-d.l;d.x=Math.random()*(W2+60)}});g.stroke()}requestAnimationFrame(f)})()}}
-<script>
+
   // Connexion automatique au robot NASA (donnees_live.json)
   async function chargerDonneesLiveNASA() {
     try {
