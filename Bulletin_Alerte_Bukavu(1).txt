@@ -1,0 +1,24 @@
+====================================================================
+BULLETIN DE SURVEILLANCE ENVIRONNEMENTALE - VILLE DE BUKAVU
+Date du rapport : 15/11/2026 à 09:41
+====================================================================
+1. MÉTÉO & SOLS (NASA GPM & SMAP) :
+   - Précipitation moyenne : 0.00 mm/h | Pic : 0.00 mm/h
+   - Humidité des sols     : 0.187 m3/m3
+   - Statut d'alerte       : VIGILANCE VERTE (Temps calme / Collecte préventive)
+
+Utilisez le code avec précaution.
+2. POINTS NOIRS DÉTECTÉS (NASA HLS, NASADEM & FIRMS) :
+	• Total amas de déchets : 332 zones
+	• Bloquant un axe d'eau : 27 points critiques
+	• Foyers de combustion  : 1 points chauds
+3. RECOMMANDATION :
+-> Poursuivre le ramassage préventif et surveiller les foyers de combustion.
+4. TOP 5 DES COORDONNÉES GPS PRIORITAIRES :
+         Type_Alerte  Altitude_m          Sur_Axe_Drainage  Latitude  Longitude
+   Combustion_Active      1560.0             Non (Versant)  -2.54347   28.86719
+Accumulation_Dechets      1474.0 OUI (Obstruction directe)  -2.50776   28.86827
+Accumulation_Dechets      1477.0 OUI (Obstruction directe)  -2.50289   28.87612
+Accumulation_Dechets      1482.0 OUI (Obstruction directe)  -2.50722   28.86692
+Accumulation_Dechets      1489.0 OUI (Obstruction directe)  -2.50749   28.86530
+====================================================================
