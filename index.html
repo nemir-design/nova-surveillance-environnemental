@@ -177,4 +177,56 @@ if(Pl.rate>0&&!RM){const pc=$('pluie'),c=document.createElement('canvas');c.id='
 const rs=()=>{W2=c.width=pc.clientWidth;H2=c.height=pc.clientHeight};rs();addEventListener('resize',rs);new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(pc);
 for(let i=0;i<n;i++)dr.push({x:Math.random()*W2,y:Math.random()*H2,l:8+Math.random()*14,v:5+Math.random()*7+Pl.rate/3});
 (function f(){if(vis&&!document.hidden){g.clearRect(0,0,W2,H2);g.strokeStyle='#3b5bdb';g.lineWidth=1.2;g.globalAlpha=.4;g.beginPath();dr.forEach(d=>{g.moveTo(d.x,d.y);g.lineTo(d.x-d.l*.25,d.y+d.l);d.y+=d.v;d.x-=d.v*.25;if(d.y>H2||d.x<0){d.y=-d.l;d.x=Math.random()*(W2+60)}});g.stroke()}requestAnimationFrame(f)})()}}
+<script>
+  // Connexion automatique au robot NASA (donnees_live.json)
+  async function chargerDonneesLiveNASA() {
+    try {
+      // Le paramètre ?t= empêche le navigateur d'afficher une ancienne version en cache
+      const reponse = await fetch('./donnees_live.json?t=' + new Date().getTime());
+      if (!reponse.ok) throw new Error("Fichier live non disponible");
+      
+      const data = await reponse.json();
+      console.log("✅ Données NASA synchronisées :", data);
+
+      // 1. Afficher un bandeau discret de synchronisation en temps réel en haut de la page
+      let bandeauLive = document.getElementById('bandeau-nasa-live');
+      if (!bandeauLive) {
+        bandeauLive = document.createElement('div');
+        bandeauLive.id = 'bandeau-nasa-live';
+        bandeauLive.style.cssText = "background:#0f172a; color:#38bdf8; text-align:center; padding:8px; font-size:13px; font-family:sans-serif; border-bottom:1px solid #1e293b;";
+        document.body.prepend(bandeauLive);
+      }
+
+      bandeauLive.innerHTML = `
+        🛰️ <b>SYNCHRO NASA LIVE :</b> Dernière mise à jour le <b>${data.derniere_mise_a_jour}</b> | 
+        Pluie max : <b>${data.pluie_max_mmh} mm/h</b> | 
+        Statut : <b>${data.statut_alerte}</b> | 
+        Feux actifs détectés (24h) : <b>${data.feux_temps_reel ? data.feux_temps_reel.length : 0}</b>
+      `;
+
+      // 2. Si votre carte Leaflet s'appelle "map", ajouter les nouveaux feux en temps réel
+      if (typeof map !== 'undefined' && data.feux_temps_reel) {
+        data.feux_temps_reel.forEach(feu => {
+          L.circleMarker([feu.Latitude, feu.Longitude], {
+            radius: 9,
+            fillColor: "#ef4444",
+            color: "#ffffff",
+            weight: 2,
+            fillOpacity: 0.95
+          })
+          .bindPopup(`🔥 <b>ALERTE FEU SATELLITE LIVE</b><br>Date : ${feu.Date_Satellite || 'Récent'}<br>Puissance : ${feu.Puissance_MW || '--'} MW`)
+          .addTo(map);
+        });
+      }
+
+    } catch (erreur) {
+      console.warn("Mode hors-ligne ou attente de la première exécution du robot :", erreur);
+    }
+  }
+
+  // Lancer la synchronisation dès l'ouverture du tableau de bord
+  window.addEventListener('DOMContentLoaded', chargerDonneesLiveNASA);
+</script>
+
+
 </script></body></html>
